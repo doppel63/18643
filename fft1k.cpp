@@ -45,25 +45,37 @@ void br(float data[], int nn)
 // this is only the bufferfly portion
 void fft1k_br(float data[2*SIZE])
 {
-  int i, j;
-  float wr, wi;
-  float tempr, tempi;
+#pragma HLS ARRAY_PARTITION variable=data cyclic factor=2 dim=1
+  ap_uint<10> i, j;
+  COEFF_TYPE wr, wi;
+  COEFF_TYPE d2i, d2j, d2i1, d2j1;
+  COEFF_TYPE tempr, tempi;
+
   int table, entry;
 
   // constants?
-  for (table=0; table<10; table++) {
-	  for (entry=0; entry<512; entry++) {
+  Stage_Loop: for (table=0; table<10; table++) {
+	  Row_Loop: for (entry=0; entry<512; entry++) {
+#pragma HLS DEPENDENCE variable=data inter false
+#pragma HLS PIPELINE
+		  // do all "loading" into "registers"
 		  consts_t en = coeff[table][entry];
 		  i = en.i;
 		  j = en.j;
 		  wr = en.wr;
 		  wi = en.wi;
-		  tempr = wr*data[2*j]   - wi*data[2*j+1];
-		  tempi = wr*data[2*j+1] + wi*data[2*j];
-		  data[2*j]   = data[2*i]   - tempr;
-		  data[2*j+1] = data[2*i+1] - tempi;
-		  data[2*i] += tempr;
-		  data[2*i+1] += tempi;
+
+		  d2i = data[2*i];
+		  d2j = data[2*j];
+		  d2i1 = data[2*i+1];
+		  d2j1 = data[2*j+1];
+
+		  tempr = wr*d2j  - wi*d2j1;
+		  tempi = wr*d2j1 + wi*d2j;
+		  data[2*j]   = d2i  - tempr;
+		  data[2*j+1] = d2i1 - tempi;
+		  data[2*i] = d2i + tempr;
+		  data[2*i+1] = d2i1 + tempi;
 	  }
   }
 }

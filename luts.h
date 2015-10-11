@@ -1,10 +1,11 @@
 #include <ap_int.h>
+#include <ap_fixed.h>
 
 typedef struct{
-	ap_ufixed<10, 10> i;
-	ap_ufixed<10, 10> j;
-	float wr;
-	float wi;
+	ap_uint<10> i;
+	ap_uint<10> j;
+	COEFF_TYPE wr;
+	COEFF_TYPE wi;
 } consts_t;
 
 // LUTs
