@@ -4,8 +4,8 @@
 typedef struct{
 	ap_uint<10> i;
 	ap_uint<10> j;
-	COEFF_TYPE wr;
-	COEFF_TYPE wi;
+	float wr;
+	float wi;
 } consts_t;
 
 // LUTs

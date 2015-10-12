@@ -8,11 +8,11 @@
 using namespace std;
 
 #include "fft1k.h"
-#include "fft1k_ref0.h"
+//#include "fft1k_ref0.h"
 //#include "fft1k_ref1.h"
 //#include "fft1k_ref2.h"
 //#include "fft1k_ref3.h"
-//#include "fft1k_ref4.h"
+#include "fft1k_ref4.h"
 
 int main(int argc, char **argv) {
   int error_count = 0;
